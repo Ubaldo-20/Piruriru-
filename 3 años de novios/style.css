@@ -1,0 +1,114 @@
+:root{
+  --pink:#7b6fff; --red:#ff4d6d;
+  --bg1:#ffafbd; --bg2:#ffc3a0; --bg3:#d4fc79; --bg4:#96e6a1;
+  --paper:#fff8f5; --ink:#513a3a; --shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+html,body{height:100%}
+*{box-sizing:border-box}
+body{
+  margin:0; overflow-x:hidden; color:#222;
+  background:linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+  background-size:600% 600%; animation:gradientShift 20s ease infinite;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.wrap{min-height:100svh; display:grid; place-items:center; padding:32px 16px 96px; position:relative;}
+.title{
+  position:fixed; top:12px; left:50%; transform:translateX(-50%);
+  background:rgba(255,255,255,.65); backdrop-filter: blur(8px);
+  padding:8px 14px; border-radius:999px; font-weight:700; letter-spacing:.3px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12); z-index:10;
+}
+
+/* Sobre / carta */
+.scene{perspective:1400px; width:min(980px, 96vw);}
+.envelope{
+  position:relative; width:100%;
+  height:clamp(520px, 62vw, 680px);
+  border-radius:22px; cursor:pointer; transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.2,.9,.2,1);
+}
+.envelope:hover{ transform: translateY(-3px) rotateX(.5deg); }
+
+.envelope .body{
+  position:absolute; inset:0; background:linear-gradient(#fff,#f6efeb);
+  border-radius:22px; box-shadow:var(--shadow); overflow:hidden; border:2px solid #ffe2d9;
+}
+
+/* Solapa */
+.flap{
+  position:absolute; left:0; right:0; top:0; height:40%;
+  transform-origin: top center; transform: rotateX(0deg);
+  background: conic-gradient(from 180deg at 50% 100%, #ffd7e1, #fff, #ffd7e1);
+  border-top-left-radius:22px; border-top-right-radius:22px;
+  border-bottom:2px solid #ffd1c4; z-index:5; transition: transform .9s cubic-bezier(.2,.9,.2,1);
+}
+
+/* Carta interior en 2 columnas */
+.letter{
+  position:absolute; left:4%; right:4%; top:12%; bottom:5%;
+  background: var(--paper); border-radius:18px; border:1px solid #ffe9e2;
+  box-shadow: inset 0 8px 24px rgba(0,0,0,.08); transform: translateZ(30px);
+  display:grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr auto;
+  gap:14px; padding:14px; overflow:hidden;
+}
+.letter-inner{
+  overflow:auto; padding:6px 8px 0 8px;
+}
+.letter h1{ margin:6px 0 10px; font-size: clamp(22px, 4.4vw, 34px); color: var(--red); }
+.letter p{ line-height:1.6; color: var(--ink); margin:10px 0; }
+.big-love{ font-size: clamp(1rem, 1.2rem, 1.3rem); }
+.signature{ margin-top:6px; font-style:italic; text-align:right; color:#7d5757; }
+
+/* Galería derecha */
+.gallery{
+  overflow:hidden; border-radius:16px; border:1px solid #ffe1db;
+  box-shadow:0 10px 30px rgba(0,0,0,.12); background:#fff;
+}
+.slideshow{ position:relative; width:100%; height:100%; min-height:260px; }
+.slide{ position:absolute; inset:0; opacity:0; transition: opacity .8s ease; display:grid; place-items:center; }
+.slide img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:16px; }
+.slide.active{ opacity:1; }
+
+/* Botones */
+.buttons{ grid-column: 1 / -1; display:flex; gap:10px; justify-content:center; margin-top:8px; }
+.openHint, .closeHint{
+  background: linear-gradient(90deg, var(--red), var(--pink)); color:white;
+  border:none; border-radius:999px; padding:10px 16px; font-weight:700;
+  letter-spacing:.3px; box-shadow: 0 10px 30px rgba(255,77,109,.35);
+  cursor:pointer;
+}
+.closeHint{ background: linear-gradient(90deg,#888,#444); }
+
+/* Ocultar contenido hasta abrir */
+.letter .letter-inner,
+.letter .gallery {
+  opacity: 0; filter: blur(6px); transform: translateY(8px);
+  transition: opacity .6s ease, filter .6s ease, transform .6s ease;
+  pointer-events: none;
+}
+.envelope.open .letter .letter-inner,
+.envelope.open .letter .gallery {
+  opacity: 1; filter: none; transform: none; pointer-events: auto;
+}
+.envelope:not(.open) .closeHint{ display:none; }
+.envelope.open .openHint{ display:none; }
+
+/* Flores / corazones */
+.flowers{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+.flower{ position:absolute; bottom:-40px; font-size: clamp(16px, 4vw, 26px);
+  animation: floatUp linear forwards; opacity:.9; filter: drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+@keyframes floatUp{0%{transform:translateY(0) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+.hearts{ position:fixed; inset:0; pointer-events:none; overflow:visible; }
+.heart{ position:absolute; font-size:24px; opacity:0; transform: translate(-50%, -50%) scale(.6);
+  animation: pop 1.2s ease forwards; filter: drop-shadow(0 8px 14px rgba(0,0,0,.2)); }
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-20%) scale(.5)}20%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(.9)}}
+
+/* Responsive */
+@media (max-width:720px){
+  .scene{ width:98vw }
+  .letter{ grid-template-columns: 1fr; grid-template-rows: auto 220px auto; }
+  .gallery{ min-height:220px; }
+}
